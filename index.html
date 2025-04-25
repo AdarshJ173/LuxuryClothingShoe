@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeVogue | Premium Fashion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #f5f5f5;
+            --accent: #c19a6b;
+            --text: #333;
+            --light-text: #777;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text);
+            background-color: var(--secondary);
+            overflow-x: hidden;
+        }
+        
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-section {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .product-image {
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .quick-view-btn {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover .quick-view-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        .parallax-section {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 60vh;
+            position: relative;
+        }
+        
+        .collection-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .product-modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .product-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .marquee {
+            animation: marquee 20s linear infinite;
+            white-space: nowrap;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .size-selector input[type="radio"]:checked + label {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .color-selector input[type="radio"]:checked + label {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .rotate-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        
+        .rotate-3d:hover {
+            transform: rotateY(15deg) rotateX(5deg);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Header -->
+    <header class="fixed w-full z-50 bg-white bg-opacity-90 backdrop-blur-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="text-2xl font-serif font-bold tracking-wider">
+                    <span class="text-black">LUXE</span><span class="text-amber-800">VOGUE</span>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <div class="dropdown relative">
+                        <a href="#" class="nav-link text-sm uppercase tracking-wider hover:text-amber-800">Women</a>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-50">
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Dresses</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Tops</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Pants</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Shoes</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Accessories</a>
+                        </div>
+                    </div>
+                    <div class="dropdown relative">
+                        <a href="#" class="nav-link text-sm uppercase tracking-wider hover:text-amber-800">Men</a>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-50">
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Shirts</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Pants</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Suits</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Shoes</a>
+                            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100">Accessories</a>
+                        </div>
+                    </div>
+                    <a href="#" class="nav-link text-sm uppercase tracking-wider hover:text-amber-800">Collections</a>
+                    <a href="#" class="nav-link text-sm uppercase tracking-wider hover:text-amber-800">About</a>
+                </nav>
+                
+                <!-- Icons -->
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        <i class="fas fa-search text-gray-600 hover:text-amber-800 cursor-pointer"></i>
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-user text-gray-600 hover:text-amber-800 cursor-pointer"></i>
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-heart text-gray-600 hover:text-amber-800 cursor-pointer"></i>
+                        <div class="cart-count">0</div>
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-shopping-bag text-gray-600 hover:text-amber-800 cursor-pointer"></i>
+                        <div class="cart-count">0</div>
+                    </div>
+                    <div class="md:hidden">
+                        <i class="fas fa-bars text-gray-600 hover:text-amber-800 cursor-pointer"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section relative flex items-center justify-center text-white">
+        <div class="text-center px-4">
+            <h1 class="text-5xl md:text-7xl font-serif mb-6 fade-in">ELEVATE YOUR STYLE</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto fade-in">Discover our curated collection of premium clothing and footwear crafted for the modern individual</p>
+            <button class="bg-amber-800 hover:bg-amber-700 text-white px-8 py-3 uppercase tracking-wider text-sm fade-in transition duration-300">Shop Now</button>
+        </div>
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down text-white text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-serif text-center mb-12">Featured Categories</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Women's Category -->
+                <div class="relative overflow-hidden group h-96">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
+                         alt="Women's Collection" 
+                         class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-serif mb-2">Women's</h3>
+                            <button class="border border-white px-6 py-2 text-sm uppercase tracking-wider hover:bg-white hover:text-black transition duration-300">Explore</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Men's Category -->
+                <div class="relative overflow-hidden group h-96">
+                    <img src="https://images.unsplash.com/photo-1593030103066-0093718efeb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" 
+                         alt="Men's Collection" 
+                         class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-serif mb-2">Men's</h3>
+                            <button class="border border-white px-6 py-2 text-sm uppercase tracking-wider hover:bg-white hover:text-black transition duration-300">Explore</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Shoes Category -->
+                <div class="relative overflow-hidden group h-96">
+                    <img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" 
+                         alt="Shoes Collection" 
+                         class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <h3 class="text-2xl font-serif mb-2">Footwear</h3>
+                            <button class="border border-white px-6 py-2 text-sm uppercase tracking-wider hover:bg-white hover:text-black transition duration-300">Explore</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Arrivals -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl font-serif">New Arrivals</h2>
+                <a href="#" class="text-sm uppercase tracking-wider border-b border-transparent hover:border-amber-800 hover:text-amber-800 transition duration-300">View All</a>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-md overflow-hidden relative">
+                    <div class="relative overflow-hidden h-80">
+                        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80" 
+                             alt="Premium Leather Jacket" 
+                             class="w-full h-full object-cover product-image">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md cursor-pointer hover:bg-amber-800 hover:text-white transition duration-300">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="quick-view-btn absolute bottom-4 left-0 right-0 mx-auto w-40">
+                            <button class="bg-amber-800 text-white w-full py-2 text-sm uppercase tracking-wider hover:bg-amber-700 transition duration-300" onclick="openProductModal(1)">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium mb-1">Premium Leather Jacket</h3>
+                        <p class="text-gray-500 text-sm mb-2">Men's Outerwear</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">$349.99</span>
+                            <div class="flex space-x-1">
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star-half-alt text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-md overflow-hidden relative">
+                    <div class="relative overflow-hidden h-80">
+                        <img src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1174&q=80" 
+                             alt="Silk Evening Dress" 
+                             class="w-full h-full object-cover product-image">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md cursor-pointer hover:bg-amber-800 hover:text-white transition duration-300">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="quick-view-btn absolute bottom-4 left-0 right-0 mx-auto w-40">
+                            <button class="bg-amber-800 text-white w-full py-2 text-sm uppercase tracking-wider hover:bg-amber-700 transition duration-300" onclick="openProductModal(2)">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium mb-1">Silk Evening Dress</h3>
+                        <p class="text-gray-500 text-sm mb-2">Women's Dresses</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">$279.99</span>
+                            <div class="flex space-x-1">
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-md overflow-hidden relative">
+                    <div class="relative overflow-hidden h-80">
+                        <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=698&q=80" 
+                             alt="Classic Oxford Shoes" 
+                             class="w-full h-full object-cover product-image">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md cursor-pointer hover:bg-amber-800 hover:text-white transition duration-300">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="quick-view-btn absolute bottom-4 left-0 right-0 mx-auto w-40">
+                            <button class="bg-amber-800 text-white w-full py-2 text-sm uppercase tracking-wider hover:bg-amber-700 transition duration-300" onclick="openProductModal(3)">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium mb-1">Classic Oxford Shoes</h3>
+                        <p class="text-gray-500 text-sm mb-2">Men's Footwear</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">$199.99</span>
+                            <div class="flex space-x-1">
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="far fa-star text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-md overflow-hidden relative">
+                    <div class="relative overflow-hidden h-80">
+                        <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=734&q=80" 
+                             alt="Cashmere Sweater" 
+                             class="w-full h-full object-cover product-image">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md cursor-pointer hover:bg-amber-800 hover:text-white transition duration-300">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="quick-view-btn absolute bottom-4 left-0 right-0 mx-auto w-40">
+                            <button class="bg-amber-800 text-white w-full py-2 text-sm uppercase tracking-wider hover:bg-amber-700 transition duration-300" onclick="openProductModal(4)">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium mb-1">Cashmere Sweater</h3>
+                        <p class="text-gray-500 text-sm mb-2">Women's Knitwear</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">$159.99</span>
+                            <div class="flex space-x-1">
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Section -->
+    <section class="parallax-section" style="background-image: url('https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')">
+        <div class="collection-overlay">
+            <div class="max-w-2xl mx-auto px-4">
+                <h2 class="text-4xl md:text-5xl font-serif mb-6">Spring Collection 2023</h2>
+                <p class="text-lg mb-8">Experience the perfect blend of comfort and sophistication with our latest spring arrivals</p>
+                <button class="bg-transparent border-2 border-white px-8 py-3 uppercase tracking-wider text-white hover:bg-white hover:text-black transition duration-300">Discover</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Sellers -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-3xl font-serif">Best Sellers</h2>
+                <a href="#" class="text-sm uppercase tracking-wider border-b border-transparent hover:border-amber-800 hover:text-amber-800 transition duration-300">View All</a>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Product 5 -->
+                <div class="product-card bg-white rounded-md overflow-hidden relative">
+                    <div class="relative overflow-hidden h-80">
+                        <img src="https://images.unsplash.com/photo-1595341888016-a392ef81b7de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1179&q=80" 
+                             alt="Tailored Wool Suit" 
+                             class="w-full h-full object-cover product-image">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md cursor-pointer hover:bg-amber-800 hover:text-white transition duration-300">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="quick-view-btn absolute bottom-4 left-0 right-0 mx-auto w-40">
+                            <button class="bg-amber-800 text-white w-full py-2 text-sm uppercase tracking-wider hover:bg-amber-700 transition duration-300" onclick="openProductModal(5)">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium mb-1">Tailored Wool Suit</h3>
+                        <p class="text-gray-500 text-sm mb-2">Men's Suits</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">$499.99</span>
+                            <div class="flex space-x-1">
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star-half-alt text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 6 -->
+                <div class="product-card bg-white rounded-md overflow-hidden relative">
+                    <div class="relative overflow-hidden h-80">
+                        <img src="https://images.unsplash.com/photo-1680039211156-66c721b87625?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                             alt="Designer Handbag" 
+                             class="w-full h-full object-cover product-image">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md cursor-pointer hover:bg-amber-800 hover:text-white transition duration-300">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="quick-view-btn absolute bottom-4 left-0 right-0 mx-auto w-40">
+                            <button class="bg-amber-800 text-white w-full py-2 text-sm uppercase tracking-wider hover:bg-amber-700 transition duration-300" onclick="openProductModal(6)">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium mb-1">Designer Handbag</h3>
+                        <p class="text-gray-500 text-sm mb-2">Women's Accessories</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">$299.99</span>
+                            <div class="flex space-x-1">
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 7 -->
+                <div class="product-card bg-white rounded-md overflow-hidden relative">
+                    <div class="relative overflow-hidden h-80">
+                        <img src="https://images.unsplash.com/photo-1669197798911-68a45e28e35a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGx1eHVyeSUyMHNpbGslMjBibG91c2V8ZW58MHx8MHx8fDA%3D" 
+                             alt="Silk Blouse" 
+                             class="w-full h-full object-cover product-image">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md cursor-pointer hover:bg-amber-800 hover:text-white transition duration-300">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="quick-view-btn absolute bottom-4 left-0 right-0 mx-auto w-40">
+                            <button class="bg-amber-800 text-white w-full py-2 text-sm uppercase tracking-wider hover:bg-amber-700 transition duration-300" onclick="openProductModal(7)">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium mb-1">Silk Blouse</h3>
+                        <p class="text-gray-500 text-sm mb-2">Women's Tops</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">$129.99</span>
+                            <div class="flex space-x-1">
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="far fa-star text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 8 -->
+                <div class="product-card bg-white rounded-md overflow-hidden relative">
+                    <div class="relative overflow-hidden h-80">
+                        <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80" 
+                             alt="Leather Sneakers" 
+                             class="w-full h-full object-cover product-image">
+                        <div class="absolute top-4 right-4">
+                            <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md cursor-pointer hover:bg-amber-800 hover:text-white transition duration-300">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        <div class="quick-view-btn absolute bottom-4 left-0 right-0 mx-auto w-40">
+                            <button class="bg-amber-800 text-white w-full py-2 text-sm uppercase tracking-wider hover:bg-amber-700 transition duration-300" onclick="openProductModal(8)">Quick View</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium mb-1">Leather Sneakers</h3>
+                        <p class="text-gray-500 text-sm mb-2">Men's Footwear</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">$179.99</span>
+                            <div class="flex space-x-1">
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                                <i class="fas fa-star text-amber-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                    <h2 class="text-3xl font-serif mb-6">Our Story</h2>
+                    <p class="text-gray-600 mb-6">Founded in 2010, LuxeVogue emerged from a simple yet powerful vision: to redefine luxury fashion by blending timeless elegance with contemporary design.</p>
+                    <p class="text-gray-600 mb-6">Each piece in our collection is meticulously crafted using only the finest materials, ensuring unparalleled quality and comfort. Our designers draw inspiration from global fashion capitals while maintaining a commitment to sustainable practices.</p>
+                    <p class="text-gray-600 mb-8">Today, LuxeVogue stands as a symbol of sophisticated style, dressing discerning individuals who appreciate the finer details in life.</p>
+                    <button class="bg-black text-white px-8 py-3 uppercase tracking-wider text-sm hover:bg-amber-800 transition duration-300">Learn More</button>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="h-64 overflow-hidden rounded-md">
+                            <img src="https://plus.unsplash.com/premium_photo-1663013425512-23e2050e694d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                 alt="LuxeVogue Workshop" 
+                                 class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                        </div>
+                        <div class="h-64 overflow-hidden rounded-md">
+                            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
+                                 alt="LuxeVogue Materials" 
+                                 class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                        </div>
+                        <div class="h-64 overflow-hidden rounded-md">
+                            <img src="https://images.unsplash.com/photo-1624505474108-7f8d43c248de?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bHV4dXJ5JTIwY2xvdGglMjBkZXNpZ258ZW58MHx8MHx8fDA%3D" 
+                                 alt="LuxeVogue Design" 
+                                 class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                        </div>
+                        <div class="h-64 overflow-hidden rounded-md">
+                            <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
+                                 alt="LuxeVogue Showroom" 
+                                 class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-serif text-center mb-12">What Our Clients Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-gray-50 p-8 rounded-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex space-x-1 text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"The quality of LuxeVogue's leather jacket exceeded all my expectations. The craftsmanship is impeccable and the fit is perfect. Worth every penny!"</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Client" class="w-12 h-12 rounded-full object-cover mr-4">
+                        <div>
+                            <h4 class="font-medium">Michael Johnson</h4>
+                            <p class="text-gray-500 text-sm">New York, USA</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-gray-50 p-8 rounded-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex space-x-1 text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"I've never felt more confident than when wearing my LuxeVogue evening dress. The attention to detail is remarkable and I receive compliments every time I wear it."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Client" class="w-12 h-12 rounded-full object-cover mr-4">
+                        <div>
+                            <h4 class="font-medium">Sophie Martin</h4>
+                            <p class="text-gray-500 text-sm">Paris, France</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-gray-50 p-8 rounded-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex space-x-1 text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"As someone who values both style and comfort, LuxeVogue's cashmere sweaters are a wardrobe essential. The quality is unmatched and they last for years."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Client" class="w-12 h-12 rounded-full object-cover mr-4">
+                        <div>
+                            <h4 class="font-medium">David Chen</h4>
+                            <p class="text-gray-500 text-sm">Tokyo, Japan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 bg-amber-800 text-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl font-serif mb-4">Join Our Community</h2>
+                <p class="mb-8">Subscribe to our newsletter and receive exclusive offers, early access to new collections, and style inspiration.</p>
+                <div class="flex flex-col sm:flex-row justify-center max-w-md mx-auto">
+                    <input type="email" placeholder="Your email address" class="px-4 py-3 w-full sm:w-auto sm:flex-grow text-gray-900 rounded-md sm:rounded-r-none mb-2 sm:mb-0">
+                    <button class="bg-black text-white px-6 py-3 uppercase tracking-wider text-sm hover:bg-gray-900 transition duration-300 sm:rounded-l-none rounded-md">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-xl font-serif mb-4">LUXEVOGUE</h3>
+                    <p class="text-gray-400 mb-4">Redefining luxury fashion with timeless elegance and contemporary design since 2010.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg uppercase tracking-wider mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Shop</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Customer Service -->
+                <div>
+                    <h3 class="text-lg uppercase tracking-wider mb-4">Customer Service</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Shipping Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Returns & Exchanges</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Size Guide</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-lg uppercase tracking-wider mb-4">Contact Us</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>123 Fashion Avenue, New York, NY 10001</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-3"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <span>info@luxevogue.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2023 LuxeVogue. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Visa" class="h-8">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="Mastercard" class="h-8">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196566.png" alt="American Express" class="h-8">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196553.png" alt="PayPal" class="h-8">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Modal -->
+    <div class="product-modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+        <div class="bg-white max-w-6xl w-full max-h-screen overflow-y-auto rounded-lg relative">
+            <button class="absolute top-4 right-4 text-gray-500 hover:text-black z-50" onclick="closeProductModal()">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <!-- Product Images -->
+                <div class="p-8">
+                    <div class="mb-4 h-96 overflow-hidden rounded-md">
+                        <img id="modal-main-image" src="" alt="Product" class="w-full h-full object-cover">
+                    </div>
+                    <div id="modal-thumbnails" class="grid grid-cols-4 gap-2">
+                        <!-- Thumbnails will be dynamically populated -->
+                    </div>
+                </div>
+                
+                <!-- Product Details -->
+                <div class="p-8 border-t lg:border-t-0 lg:border-l border-gray-200">
+                    <h2 id="modal-product-name" class="text-3xl font-serif mb-2">Premium Leather Jacket</h2>
+                    <div class="flex items-center mb-4">
+                        <div class="flex space-x-1 text-amber-400 mr-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-gray-500 text-sm">24 Reviews</span>
+                    </div>
+                    
+                    <p id="modal-product-price" class="text-2xl font-medium mb-6">$349.99</p>
+                    
+                    <p id="modal-product-description" class="text-gray-600 mb-6">
+                        Crafted from the finest Italian leather, this premium jacket offers unparalleled quality and timeless style. The supple leather molds to your body over time, creating a personalized fit. Features include a quilted lining for added warmth, multiple interior pockets, and a classic biker-inspired silhouette.
+                    </p>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-sm uppercase tracking-wider mb-3">Color</h3>
+                        <div class="color-selector flex space-x-2">
+                            <input type="radio" name="color" id="color-black" class="hidden" checked>
+                            <label for="color-black" class="w-8 h-8 rounded-full bg-black cursor-pointer border border-gray-300"></label>
+                            
+                            <input type="radio" name="color" id="color-brown" class="hidden">
+                            <label for="color-brown" class="w-8 h-8 rounded-full bg-amber-800 cursor-pointer border border-gray-300"></label>
+                            
+                            <input type="radio" name="color" id="color-tan" class="hidden">
+                            <label for="color-tan" class="w-8 h-8 rounded-full bg-amber-200 cursor-pointer border border-gray-300"></label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-sm uppercase tracking-wider">Size</h3>
+                            <a href="#" class="text-sm text-gray-500 hover:text-black">Size Guide</a>
+                        </div>
+                        <div class="size-selector grid grid-cols-5 gap-2">
+                            <input type="radio" name="size" id="size-xs" class="hidden">
+                            <label for="size-xs" class="border border-gray-300 rounded-md text-center py-2 text-sm cursor-pointer hover:border-black">XS</label>
+                            
+                            <input type="radio" name="size" id="size-s" class="hidden" checked>
+                            <label for="size-s" class="border border-gray-300 rounded-md text-center py-2 text-sm cursor-pointer hover:border-black">S</label>
+                            
+                            <input type="radio" name="size" id="size-m" class="hidden">
+                            <label for="size-m" class="border border-gray-300 rounded-md text-center py-2 text-sm cursor-pointer hover:border-black">M</label>
+                            
+                            <input type="radio" name="size" id="size-l" class="hidden">
+                            <label for="size-l" class="border border-gray-300 rounded-md text-center py-2 text-sm cursor-pointer hover:border-black">L</label>
+                            
+                            <input type="radio" name="size" id="size-xl" class="hidden">
+                            <label for="size-xl" class="border border-gray-300 rounded-md text-center py-2 text-sm cursor-pointer hover:border-black">XL</label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center border border-gray-300 rounded-md">
+                                <button class="px-4 py-2 text-gray-600 hover:text-black">-</button>
+                                <span class="px-4">1</span>
+                                <button class="px-4 py-2 text-gray-600 hover:text-black">+</button>
+                            </div>
+                            <button class="bg-amber-800 hover:bg-amber-700 text-white px-8 py-3 uppercase tracking-wider text-sm flex-1 transition duration-300">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-4">
+                        <div class="flex items-start mb-2">
+                            <i class="fas fa-truck mt-1 mr-3 text-gray-500"></i>
+                            <div>
+                                <h4 class="font-medium">Free Shipping</h4>
+                                <p class="text-gray-500 text-sm">Free worldwide shipping on all orders over $100</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start mb-2">
+                            <i class="fas fa-undo mt-1 mr-3 text-gray-500"></i>
+                            <div>
+                                <h4 class="font-medium">Easy Returns</h4>
+                                <p class="text-gray-500 text-sm">30-day return policy for unused items</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-shield-alt mt-1 mr-3 text-gray-500"></i>
+                            <div>
+                                <h4 class="font-medium">Secure Payment</h4>
+                                <p class="text-gray-500 text-sm">We accept all major credit cards</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Premium Leather Jacket",
+                price: "$349.99",
+                description: "Crafted from the finest Italian leather, this premium jacket offers unparalleled quality and timeless style. The supple leather molds to your body over time, creating a personalized fit. Features include a quilted lining for added warmth, multiple interior pockets, and a classic biker-inspired silhouette.",
+                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80",
+                category: "Men's Outerwear"
+            },
+            {
+                id: 2,
+                name: "Silk Evening Dress",
+                price: "$279.99",
+                description: "This exquisite silk evening dress drapes beautifully and features a flattering silhouette with delicate ruching details. The lightweight fabric moves gracefully with your body, while the hidden back zipper ensures a clean, elegant look. Perfect for special occasions and formal events.",
+                image: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1174&q=80",
+                category: "Women's Dresses"
+            },
+            {
+                id: 3,
+                name: "Classic Oxford Shoes",
+                price: "$199.99",
+                description: "Handcrafted from premium leather, these Oxford shoes feature a traditional cap toe design with meticulous brogue detailing. The leather lining provides breathability, while the durable rubber sole offers comfort and traction. A timeless addition to any gentleman's wardrobe.",
+                image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=698&q=80",
+                category: "Men's Footwear"
+            },
+            {
+                id: 4,
+                name: "Cashmere Sweater",
+                price: "$159.99",
+                description: "Made from 100% Mongolian cashmere, this ultra-soft sweater provides exceptional warmth without bulk. The fine gauge knit offers a refined look, while the ribbed trim ensures a comfortable fit. Available in a range of sophisticated colors to complement any outfit.",
+                image: "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=734&q=80",
+                category: "Women's Knitwear"
+            },
+            {
+                id: 5,
+                name: "Tailored Wool Suit",
+                price: "$499.99",
+                description: "This two-piece suit is tailored from premium Italian wool with a medium-weight fabric that's perfect for year-round wear. Features include a notched lapel, flap pockets, and a single vent for a classic silhouette. The jacket is fully lined for comfort and structure.",
+                image: "https://images.unsplash.com/photo-1595341888016-a392ef81b7de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1179&q=80",
+                category: "Men's Suits"
+            },
+            {
+                id: 6,
+                name: "Designer Handbag",
+                price: "$299.99",
+                description: "This elegant handbag is crafted from genuine leather with gold-tone hardware accents. The spacious interior features multiple compartments for organization, while the detachable shoulder strap offers versatility. The timeless design transitions seamlessly from day to evening.",
+                image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+                category: "Women's Accessories"
+            },
+            {
+                id: 7,
+                name: "Silk Blouse",
+                price: "$129.99",
+                description: "This luxurious silk blouse features a delicate button-front design with French cuffs. The fluid fabric drapes beautifully, while the hidden placket creates a clean, sophisticated look. Perfect for pairing with trousers or skirts for a polished office ensemble.",
+                image: "https://images.unsplash.com/photo-1543076449-aecec58fe353?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+                category: "Women's Tops"
+            },
+            {
+                id: 8,
+                name: "Leather Sneakers",
+                price: "$179.99",
+                description: "These premium leather sneakers combine athletic-inspired design with luxury craftsmanship. The supple leather upper is paired with a cushioned insole for all-day comfort, while the rubber outsole provides traction. The minimalist design works with both casual and smart-casual outfits.",
+                image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80",
+                category: "Men's Footwear"
+            }
+        ];
+
+        // Open product modal
+        function openProductModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                document.getElementById('modal-product-name').textContent = product.name;
+                document.getElementById('modal-product-price').textContent = product.price;
+                document.getElementById('modal-product-description').textContent = product.description;
+                document.getElementById('modal-main-image').src = product.image;
+                
+                // Generate thumbnails
+                const thumbnailsContainer = document.getElementById('modal-thumbnails');
+                thumbnailsContainer.innerHTML = '';
+                
+                // Add main product image as first thumbnail
+                const mainThumb = createThumbnail(product.image);
+                thumbnailsContainer.appendChild(mainThumb);
+                
+                // Add additional thumbnails using variations of the main image
+                const variations = [
+                    product.image + '?v=1',
+                    product.image + '?v=2',
+                    product.image + '?v=3'
+                ];
+                
+                variations.forEach(imgSrc => {
+                    const thumb = createThumbnail(imgSrc);
+                    thumbnailsContainer.appendChild(thumb);
+                });
+                
+                const modal = document.querySelector('.product-modal');
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        // Create thumbnail element
+        function createThumbnail(imgSrc) {
+            const div = document.createElement('div');
+            div.className = 'h-20 overflow-hidden rounded-md cursor-pointer border-2 border-transparent hover:border-amber-800';
+            
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.alt = 'Thumbnail';
+            img.className = 'w-full h-full object-cover';
+            img.onclick = function() { changeMainImage(this); };
+            
+            div.appendChild(img);
+            return div;
+        }
+
+        // Close product modal
+        function closeProductModal() {
+            const modal = document.querySelector('.product-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Change main image in modal
+        function changeMainImage(imgElement) {
+            document.getElementById('modal-main-image').src = imgElement.src;
+        }
+
+        // Close modal when clicking outside
+        document.querySelector('.product-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProductModal();
+            }
+        });
+
+        // Scroll animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            fadeElements.forEach(element => {
+                element.style.opacity = '0';
+            });
+            
+            setTimeout(() => {
+                fadeElements.forEach(element => {
+                    element.style.opacity = '1';
+                });
+            }, 100);
+        });
+
+        // Mobile menu toggle (placeholder)
+        document.querySelector('.fa-bars').addEventListener('click', function() {
+            alert('Mobile menu would open here');
+        });
+
+        // Cart count (demo functionality)
+        let cartCount = 0;
+        document.querySelectorAll('.fa-shopping-bag').forEach(icon => {
+            icon.addEventListener('click', function() {
+                cartCount++;
+                document.querySelectorAll('.cart-count').forEach(count => {
+                    count.textContent = cartCount;
+                });
+            });
+        });
+
+        // Wishlist count (demo functionality)
+        let wishlistCount = 0;
+        document.querySelectorAll('.fa-heart').forEach(icon => {
+            icon.addEventListener('click', function() {
+                if (this.classList.contains('text-amber-400')) {
+                    this.classList.remove('text-amber-400');
+                    this.classList.add('text-gray-300');
+                } else {
+                    this.classList.remove('text-gray-300');
+                    this.classList.add('text-amber-400');
+                    wishlistCount++;
+                    document.querySelectorAll('.cart-count')[0].textContent = wishlistCount;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
